@@ -1,6 +1,5 @@
+package documentos;
 
-import documentos.Pasaje;
-import documentos.Pasajero;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -114,4 +113,4 @@ public class Servicio {
         public double getPrecio() { return precio; }
         public ArrayList<Pasaje> getAsientos() { return asientos; }
         public Queue<Pasajero> getListaEspera() { return listaEspera; }
-    }}
+}

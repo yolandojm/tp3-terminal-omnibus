@@ -1,3 +1,5 @@
+package documentos;
+
 public class Pasajero {
     private String nombre;
     private String dni;

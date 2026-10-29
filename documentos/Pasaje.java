@@ -1,3 +1,5 @@
+package documentos;
+
 public class Pasaje {
     private Pasajero pasajero;
     private Servicio servicio;
