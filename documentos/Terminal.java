@@ -1,4 +1,7 @@
 package documentos;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 import documentos.Servicio;
 
@@ -165,6 +168,65 @@ import java.util.NoSuchElementException;
                 System.out.println(
                         entrada.getKey() + ": $" + entrada.getValue()
                 );
+            }
+        }
+
+        public void procesarArchivo(String nombreArchivo) {
+
+            int renglonesLeidos = 0;
+            int ventasConcretadas = 0;
+            int pasajerosEnEspera = 0;
+            int renglonesRechazados = 0;
+
+            try (BufferedReader lector = new BufferedReader(new FileReader(nombreArchivo))) {
+
+                String renglon;
+
+                while ((renglon = lector.readLine()) != null) {
+                    renglonesLeidos++;
+
+                    try {
+                        String[] campos = renglon.split(";", -1);
+
+                        if (campos.length != 4) {
+                            throw new RenglonInvalidoException(
+                                    "El renglón debe tener exactamente cuatro campos."
+                            );
+                        }
+
+                        String codigo = campos[0].trim();
+                        String dni = campos[1].trim();
+                        String nombre = campos[2].trim();
+                        String asiento = campos[3].trim();
+
+                        Pasajero pasajero = new Pasajero(nombre, dni);
+
+                        Pasaje pasaje = venderPasaje(codigo, pasajero, asiento);
+
+                        if (pasaje == null) {
+                            pasajerosEnEspera++;
+                        } else {
+                            ventasConcretadas++;
+                        }
+
+                    } catch (RenglonInvalidoException | VentaInvalidaException |
+                             IllegalStateException | ServicioNoEncontradoException |
+                             IllegalArgumentException e) {
+
+                        renglonesRechazados++;
+
+                        System.out.println("Renglón " + renglonesLeidos + ": " + e.getMessage());
+                    }
+                }
+
+                System.out.println("--- INFORME FINAL ---");
+                System.out.println("Renglones leídos: " + renglonesLeidos);
+                System.out.println("Ventas concretadas: " + ventasConcretadas);
+                System.out.println("Pasajeros en espera: " + pasajerosEnEspera);
+                System.out.println("Renglones rechazados: " + renglonesRechazados);
+
+            } catch (IOException e) {
+                System.out.println("No se pudo leer el archivo: " + nombreArchivo);
             }
         }
     }
