@@ -29,11 +29,13 @@ import java.util.NoSuchElementException;
         }
 
         // Buscar un servicio por su codigo
-        public Servicio buscarServicio(String codigo) {
+        public Servicio buscarServicio(String codigo)
+                throws ServicioNoEncontradoException {
+
             Servicio servicio = servicios.get(codigo);
 
             if (servicio == null) {
-                throw new NoSuchElementException(
+                throw new ServicioNoEncontradoException(
                         "No existe el servicio: " + codigo
                 );
             }
@@ -43,7 +45,8 @@ import java.util.NoSuchElementException;
 
         // Vender un pasaje
         public Pasaje venderPasaje(String codigo, Pasajero pasajero,
-                                   String asientoPedido) {
+                                   String asientoPedido)
+                throws ServicioNoEncontradoException {
 
             Servicio servicio = buscarServicio(codigo);
 
@@ -59,7 +62,6 @@ import java.util.NoSuchElementException;
 
             int numeroAsiento;
 
-            // Si pide cualquier asiento (*), buscamos el primero libre
             if (asientoPedido.equals("*")) {
 
                 numeroAsiento = 1;
@@ -69,7 +71,6 @@ import java.util.NoSuchElementException;
                     numeroAsiento++;
                 }
 
-                // Si no hay asientos libres, Servicio lo manda a espera
                 if (numeroAsiento > servicio.getAsientos().size()) {
                     numeroAsiento = 1;
                 }
@@ -79,8 +80,8 @@ import java.util.NoSuchElementException;
                 try {
                     numeroAsiento = Integer.parseInt(asientoPedido);
                 } catch (NumberFormatException e) {
-                    throw new IllegalArgumentException(
-                            "El asiento debe ser un numero o *."
+                    throw new VentaInvalidaException(
+                            "El asiento debe ser un número o *."
                     );
                 }
             }
@@ -89,7 +90,8 @@ import java.util.NoSuchElementException;
         }
 
         // Buscar un pasaje por DNI y codigo de servicio
-        public Pasaje buscarPasaje(String dni, String codigo) {
+        public Pasaje buscarPasaje(String dni, String codigo)
+                throws ServicioNoEncontradoException {
 
             Servicio servicio = buscarServicio(codigo);
 
@@ -108,13 +110,13 @@ import java.util.NoSuchElementException;
         }
 
         // Informe de pasajeros de un servicio
-        public void informePasajeros(String codigo) {
+        public void informePasajeros(String codigo)
+                throws ServicioNoEncontradoException {
 
             Servicio servicio = buscarServicio(codigo);
 
             System.out.println("PASAJEROS DEL SERVICIO " + codigo);
 
-            // Los asientos ya están ordenados en el ArrayList
             for (Pasaje pasaje : servicio.getAsientos()) {
 
                 if (pasaje != null) {
