@@ -29,7 +29,6 @@ public class Pasajero {
         this.dni = dni;
     }
 
-    // Metodo mismpo pasajero segun dni
     @Override
     public boolean equals(Object o) {
         if (this == o)
